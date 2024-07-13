@@ -8,15 +8,41 @@ import Common.Object.SqlParameter
 import Common.ServiceUtils.schemaName
 
 
-case class TaskQueryMessagePlanner(userName:String, taskName:String, override val planContext: PlanContext) extends Planner[String]:
+case class TaskQueryMessagePlanner(userName:String, taskName:String, periodicalName:String, pdfBase64:String, override val planContext: PlanContext) extends Planner[String]:
   override def plan(using PlanContext): IO[String] = {
-    /** 故意写入数据库一个消息，注意到，如果中间出现rollback，这个消息是写不进去的。 */
-    startTransaction{
-      writeDB(s"INSERT INTO ${schemaName}.task_rec (user_name, task_name) VALUES (?, ?)",
-        List(SqlParameter("String", userName),
-          SqlParameter("String", taskName)
-        ))
-//        rollback()  //这句可以注释了看看效果
-    }>>
-    IO.pure(taskName)
+    // Check if the user is already registered
+    val checkUserExists = readDBBoolean(
+      s"SELECT EXISTS(SELECT 1 FROM ${schemaName}.task_acc WHERE task_name = ?)",
+      List(SqlParameter("String", taskName))
+    )
+
+    checkUserExists.flatMap { exists =>
+      if (exists) {
+        IO.pure("Conflict")
+      } else {
+        for {
+          _ <- writeDB(
+            s"INSERT INTO ${schemaName}.task_acc (task_name, user_name) VALUES (?, ?)",
+            List(
+              SqlParameter("String", taskName),
+              SqlParameter("String", userName),
+            )
+          )
+          _ <- writeDB(
+            s"INSERT INTO ${schemaName}.task_pdf (task_name, task_pdf) VALUES (?, ?)",
+            List(
+              SqlParameter("String", taskName),
+              SqlParameter("String", pdfBase64),
+            )
+          )
+          _ <- writeDB(
+            s"INSERT INTO ${schemaName}.task_pdf (task_name, task_periodical) VALUES (?, ?)",
+            List(
+              SqlParameter("String", taskName),
+              SqlParameter("String", periodicalName),
+            )
+          )
+        } yield "OK"
+      }
+    }
   }
