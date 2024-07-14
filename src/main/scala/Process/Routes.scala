@@ -15,7 +15,22 @@ object Routes:
   private def executePlan(messageType:String, str: String): IO[String]=
     messageType match {
       case "TaskQueryMessage" =>
-        IO(decode[TaskQueryMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for PatientQueryMessage")))
+        IO(decode[TaskQueryMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for TaskQueryMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
+      case "ReadTaskInfoMessage" =>
+        IO(decode[ReadTaskInfoMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for ReadTaskInfoMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
+      case "ReadTaskPDFMessage" =>
+        IO(decode[ReadTaskPDFMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for ReadTaskPDFMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
+      case "AddTaskIdentityMessage" =>
+        IO(decode[AddTaskIdentityMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for AddTaskIdentityMessage")))
           .flatMap{m=>
             m.fullPlan.map(_.asJson.toString)
           }
