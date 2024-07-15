@@ -16,7 +16,7 @@ object Init {
     for{
       _ <- API.init(config.maximumClientConnection)
       _ <- initSchema(schemaName)
-      _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_acc (task_name TEXT, user_name TEXT, identity TEXT)", List())
+      _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_acc (task_name TEXT, user_name TEXT, identity TEXT, alias TEXT, token TEXT)", List())
       _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_pdf (task_name TEXT, task_pdf TEXT)", List())
       _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_info (task_name TEXT, task_periodical TEXT, task_area TEXT, abstract TEXT, tldr TEXT, state TEXT)", List())
     } yield ()
