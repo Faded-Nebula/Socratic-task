@@ -43,7 +43,8 @@ case class TaskQueryMessagePlanner(userName:String, taskName:String, periodicalN
               SqlParameter("String", periodicalName),
               SqlParameter("String", researchArea),
               SqlParameter("String", Abstract),
-              SqlParameter("String", TLDR)
+              SqlParameter("String", TLDR),
+              SqlParameter("String", "init"),
             )
           )
         } yield "OK"
