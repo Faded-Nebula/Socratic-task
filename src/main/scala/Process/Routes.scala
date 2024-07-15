@@ -34,6 +34,16 @@ object Routes:
           .flatMap{m=>
             m.fullPlan.map(_.asJson.toString)
           }
+      case "ReadTaskListMessage" =>
+        IO(decode[ReadTaskListMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for ReadTaskListMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
+      case "ReadPeriodicalTaskListMessage" =>
+        IO(decode[ReadPeriodicalTaskListMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for ReadPeriodicalTaskListMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
       case _ =>
         IO.raiseError(new Exception(s"Unknown type: $messageType"))
     }

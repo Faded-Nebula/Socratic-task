@@ -10,13 +10,13 @@ import cats.effect.IO
 import io.circe.Json
 import io.circe.generic.auto.*
 
-case class ReadTaskListMessagePlanner(userName: String, override val planContext: PlanContext) extends Planner[String]:
+case class ReadPeriodicalTaskListMessagePlanner(periodicalName: String, override val planContext: PlanContext) extends Planner[String]:
   override def plan(using PlanContext): IO[String] = {
     val taskListIO: IO[List[Json]] = readDBRows(
-      s"SELECT task_name FROM ${schemaName}.task_acc WHERE user_name = ?",
-      List(SqlParameter("String", userName))
+      s"SELECT task_name FROM ${schemaName}.task_info WHERE task_periodical = ?",
+      List(SqlParameter("String", periodicalName))
     )
-    taskListIO.map { userTasks =>
-      Json.arr(userTasks: _*).noSpaces
+    taskListIO.map { editorTasks =>
+      Json.arr(editorTasks: _*).noSpaces
     }
   }
