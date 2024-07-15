@@ -31,14 +31,7 @@ case class AddTaskIdentityMessagePlanner(taskName: String, userName: String, ide
         )
       )
       // Then assign an avatar and a token
-      val assignedAvatar = RandomWordSelector.selectRandomWord()
-      val assignedToken =
-        readDBRows(
-          s"SELECT task_name FROM ${schemaName}.task_acc WHERE task_name = ?",
-          List(SqlParameter("String", taskName))
-        )
-        .map(RegisteredUsers => RegisteredUsers.length + 1)
-        .toString
+      val assignedAlias = RandomWordSelector.selectRandomWord()
 
       checkUserExists.flatMap { exists =>
         if (!exists) {
@@ -48,16 +41,24 @@ case class AddTaskIdentityMessagePlanner(taskName: String, userName: String, ide
             if (registered) {
               IO.pure(s"User $userName already registered")
             } else {
-              writeDB(
-                s"INSERT INTO ${schemaName}.task_acc (task_name, user_name, identity, alias, token) VALUES (?, ?, ?, ?, ?)",
-                List(
-                  SqlParameter("String", taskName),
-                  SqlParameter("String", userName),
-                  SqlParameter("String", identity),
-                  SqlParameter("String", assignedAvatar),
-                  SqlParameter("String", assignedToken),
-                )
-              )
+              for {
+                // assign a token
+                assignedToken <- readDBRows(
+                  s"SELECT task_name FROM ${schemaName}.task_acc WHERE task_name = ?",
+                  List(SqlParameter("String", taskName))
+                ).map(RegisteredUsers => RegisteredUsers.length.toString)
+
+                _ <- writeDB(
+                    s"INSERT INTO ${schemaName}.task_acc (task_name, user_name, identity, alias, token) VALUES (?, ?, ?, ?, ?)",
+                    List(
+                      SqlParameter("String", taskName),
+                      SqlParameter("String", userName),
+                      SqlParameter("String", identity),
+                      SqlParameter("String", assignedAlias),
+                      SqlParameter("String", assignedToken),
+                    )
+                  )
+              } yield "OK"
             }
           }
         }
