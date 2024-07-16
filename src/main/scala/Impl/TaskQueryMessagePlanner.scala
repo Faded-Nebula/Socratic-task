@@ -9,7 +9,7 @@ import Common.ServiceUtils.schemaName
 import Shared.RandomWordSelector
 
 
-case class TaskQueryMessagePlanner(userName:String, taskName:String, periodicalName:String, pdfBase64:String, researchArea:String, Abstract:String, TLDR:String, override val planContext: PlanContext) extends Planner[String]:
+case class TaskQueryMessagePlanner(userName:String, taskName:String, periodicalName:String, pdfBase64:String, researchArea:String, Abstract:String, TLDR:String, keyword:String, override val planContext: PlanContext) extends Planner[String]:
   override def plan(using PlanContext): IO[String] = {
     // Check if the user is already registered
     val checkUserExists = readDBBoolean(
@@ -49,13 +49,14 @@ case class TaskQueryMessagePlanner(userName:String, taskName:String, periodicalN
             )
           )
           _ <- writeDB(
-            s"INSERT INTO ${schemaName}.task_info (task_name, task_periodical, task_area, abstract, tldr, state) VALUES (?, ?, ?, ?, ?, ?)",
+            s"INSERT INTO ${schemaName}.task_info (task_name, task_periodical, task_area, abstract, tldr, keyword, state) VALUES (?, ?, ?, ?, ?, ?, ?)",
             List(
               SqlParameter("String", taskName),
               SqlParameter("String", periodicalName),
               SqlParameter("String", researchArea),
               SqlParameter("String", Abstract),
               SqlParameter("String", TLDR),
+              SqlParameter("String", keyword),
               SqlParameter("String", "init"),
             )
           )
