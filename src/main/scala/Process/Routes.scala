@@ -54,6 +54,11 @@ object Routes:
           .flatMap{m=>
             m.fullPlan.map(_.asJson.toString)
           }
+      case "ReadTaskAuthorMessage" =>
+        IO(decode[ReadTaskAuthorMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for ReadTaskAuthorMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
       case _ =>
         IO.raiseError(new Exception(s"Unknown type: $messageType"))
     }
