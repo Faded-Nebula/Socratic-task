@@ -1,12 +1,12 @@
 package Impl
 
-import APIs.Shared.RandomWordSelector
 import cats.effect.IO
 import io.circe.generic.auto.*
 import Common.API.{PlanContext, Planner}
 import Common.DBAPI.*
 import Common.Object.SqlParameter
 import Common.ServiceUtils.schemaName
+import Shared.RandomWordSelector
 
 
 case class TaskQueryMessagePlanner(userName:String, taskName:String, periodicalName:String, pdfBase64:String, researchArea:String, Abstract:String, TLDR:String, override val planContext: PlanContext) extends Planner[String]:

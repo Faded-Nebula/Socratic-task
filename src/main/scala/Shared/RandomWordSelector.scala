@@ -1,4 +1,4 @@
-package APIs.Shared
+package Shared
 
 import scala.util.Random
 

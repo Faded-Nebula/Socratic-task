@@ -1,6 +1,5 @@
 package Impl
 
-import APIs.Shared.RandomWordSelector
 import cats.effect.IO
 import io.circe.generic.auto.*
 import Common.API.{PlanContext, Planner}
@@ -8,6 +7,7 @@ import Common.DBAPI.*
 import Common.Object.SqlParameter
 import Common.ServiceUtils.schemaName
 import APIs.UserAPI.CheckUserExistsMessage
+import Shared.RandomWordSelector
 
 
 case class AddTaskIdentityMessagePlanner(taskName: String, userName: String, identity: String, override val planContext: PlanContext) extends Planner[String]:
