@@ -88,9 +88,9 @@ object API {
         val handler = summon[ResponseHandler[T]] // Summon an instance of ResponseHandler for T
         response.status match {
           case status if status.isSuccess =>
-            response.bodyText.compile.string.flatMap { body =>
-              IO.println(s"Response body: $body")
-            } >>
+//            response.bodyText.compile.string.flatMap { body =>
+//              IO.println(s"Response body: $body")
+//            } >>
               handler.handle(response)
           case _ =>
             response.bodyText.compile.string.flatMap { body =>
