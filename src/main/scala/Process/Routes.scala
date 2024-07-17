@@ -64,6 +64,11 @@ object Routes:
           .flatMap{m=>
             m.fullPlan.map(_.asJson.toString)
           }
+      case "TaskEditInfoMessage" =>
+        IO(decode[TaskEditInfoMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for TaskEditInfoMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
       case _ =>
         IO.raiseError(new Exception(s"Unknown type: $messageType"))
     }
