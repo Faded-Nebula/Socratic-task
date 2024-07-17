@@ -10,7 +10,7 @@ case class CheckTaskIdentityMessagePlanner(taskName:String, userName:String, ove
   override def plan(using PlanContext): IO[String] = {
     // Search the Task Info on the db
     readDBString(
-      s"SELECT identity FROM ${schemaName}.task_info WHERE task_name = ?, user_name = ?",
+      s"SELECT identity FROM ${schemaName}.task_info WHERE task_name = ? and user_name = ?",
       List(
         SqlParameter("String", taskName),
         SqlParameter("String", userName)
