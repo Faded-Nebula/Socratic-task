@@ -6,7 +6,7 @@ import Common.API.{PlanContext, Planner}
 import Common.DBAPI.*
 import Common.Object.SqlParameter
 import Common.ServiceUtils.schemaName
-import APIs.UserAPI.CheckUserExistsMessage
+import APIs.UserManagementAPI.CheckUserExistsMessage
 import Shared.RandomWordSelector
 
 
