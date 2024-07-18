@@ -71,6 +71,11 @@ object Routes:
           }
       case "AddRebuttalMessage" =>
         IO(decode[AddRebuttalMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for AddRebuttalMessage")))
+           .flatMap{m=>
+                m.fullPlan.map(_.asJson.toString)
+              }
+      case "SearchTaskMessage" =>
+        IO(decode[SearchTaskMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for SearchTaskMessage")))
           .flatMap{m=>
             m.fullPlan.map(_.asJson.toString)
           }
