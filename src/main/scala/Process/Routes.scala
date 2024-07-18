@@ -79,6 +79,16 @@ object Routes:
           .flatMap{m=>
             m.fullPlan.map(_.asJson.toString)
           }
+      case "ReadAliasMessage" =>
+        IO(decode[ReadAliasMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for ReadAliasMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
+      case "ReadAliasTokenMessage" =>
+        IO(decode[ReadAliasTokenMessagePlanner](str).getOrElse(throw new Exception("Invalid JSON for ReadAliasTokenMessage")))
+          .flatMap{m=>
+            m.fullPlan.map(_.asJson.toString)
+          }
       case _ =>
         IO.raiseError(new Exception(s"Unknown type: $messageType"))
     }
