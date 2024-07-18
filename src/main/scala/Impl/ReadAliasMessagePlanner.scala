@@ -22,7 +22,7 @@ case class ReadAliasMessagePlanner(taskName:String, userName:String, override va
       } else {
         // Search the Alias on the db
         readDBString(
-          s"SELECT alias FROM ${schemaName}.task_acc WHERE task_name = ? AND userName = ?",
+          s"SELECT alias FROM ${schemaName}.task_acc WHERE task_name = ? AND user_name = ?",
           List(
             SqlParameter("String", taskName),
             SqlParameter("String", userName)
