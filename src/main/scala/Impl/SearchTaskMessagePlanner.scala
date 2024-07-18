@@ -14,7 +14,7 @@ case class SearchTaskMessagePlanner(taskName: String, override val planContext: 
   override def plan(using planContext: PlanContext): IO[String] = {
     // Fetch rows from EditorTasks
     readDBRows(
-      s"SELECT * FROM ${schemaName}.task_info WHERE task_name LIKE ?",
+      s"SELECT * FROM ${schemaName}.task_info WHERE task_name ILIKE ?",
       List(SqlParameter("String", s"%${taskName}%"))
     ).map { Logs =>
       Json.arr(Logs: _*).noSpaces
