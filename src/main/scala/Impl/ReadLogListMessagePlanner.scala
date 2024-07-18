@@ -12,7 +12,6 @@ import io.circe.syntax.*
 
 case class ReadLogListMessagePlanner(taskName:String, override val planContext: PlanContext) extends Planner[String]:
   override def plan(using planContext: PlanContext): IO[String] = {
-    // Check if the user is already registered
     // Fetch rows from EditorTasks
     readDBRows(
       s"SELECT * FROM ${schemaName}.task_log WHERE task_name = ?",
