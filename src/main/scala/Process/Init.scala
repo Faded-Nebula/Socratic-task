@@ -19,7 +19,8 @@ object Init {
       _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_acc (task_name TEXT, user_name TEXT, identity TEXT, alias TEXT, token TEXT)", List())
       _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_pdf (task_name TEXT, task_pdf TEXT)", List())
       _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_info (task_name TEXT, task_periodical TEXT, task_area TEXT, abstract TEXT, tldr TEXT, keyword TEXT, state TEXT)", List())
-      _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_log (log_type TEXT, task_name TEXT, user_name TEXT, decision TEXT, comment TEXT, reasons_to_accept TEXT, reasons_to_reject TEXT, questions_to_authors TEXT, rating INT, confidence INT)", List())
+      _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_log_counter (task_name TEXT, cnt INT)", List())
+      _ <- writeDB(s"CREATE TABLE IF NOT EXISTS ${schemaName}.task_log (log_seq INT, log_type TEXT, task_name TEXT, user_name TEXT, decision TEXT, comment TEXT, reasons_to_accept TEXT, reasons_to_reject TEXT, questions_to_authors TEXT, rating INT, confidence INT, rebuttal TEXT)", List())
     } yield ()
 
 }

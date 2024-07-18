@@ -42,6 +42,13 @@ case class TaskQueryMessagePlanner(userName:String, taskName:String, periodicalN
             )
           )
           _ <- writeDB(
+            s"INSERT INTO ${schemaName}.task_log_counter (task_name, cnt) VALUES (?, ?)",
+            List(
+              SqlParameter("String", taskName),
+              SqlParameter("Int", "0"),
+            )
+          )
+          _ <- writeDB(
             s"INSERT INTO ${schemaName}.task_pdf (task_name, task_pdf) VALUES (?, ?)",
             List(
               SqlParameter("String", taskName),
