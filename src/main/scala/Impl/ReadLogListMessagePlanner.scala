@@ -14,7 +14,7 @@ case class ReadLogListMessagePlanner(taskName:String, override val planContext: 
   override def plan(using planContext: PlanContext): IO[String] = {
     // Fetch rows from EditorTasks
     readDBRows(
-      s"SELECT * FROM ${schemaName}.task_log WHERE task_name = ?",
+      s"SELECT * FROM ${schemaName}.task_log WHERE task_name = ? ORDER BY log_seq ASC",
       List(SqlParameter("String", taskName))
     ).map { Logs =>
       Json.arr(Logs: _*).noSpaces
