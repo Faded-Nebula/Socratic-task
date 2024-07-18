@@ -27,7 +27,7 @@ case class CheckTaskIdentityMessagePlanner(taskName:String, userName:String, ove
           )
         )
       } else {
-        IO.pure(s"User $userName not registered in the task $taskName")
+        IO.pure(s"Not Registered")
       }
     }
   }
