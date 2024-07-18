@@ -25,6 +25,7 @@ case class Log(
                            reasonsToAccept: String,
                            reasonsToReject: String,
                            questionsToAuthors: String,
+                           rebuttal: String,
                            rating: Int,
                            confidence: Int
                          )
