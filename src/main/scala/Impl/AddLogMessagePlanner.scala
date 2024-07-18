@@ -45,8 +45,8 @@ case class AddLogMessagePlanner(taskName:String, log:Log, override val planConte
       _ <- writeDB(
         s"UPDATE ${schemaName}.task_log_counter SET cnt = ? WHERE task_name = ?",
         List(
-          SqlParameter("String", newCnt.toString),
-          SqlParameter("Int", taskName)
+          SqlParameter("Int", newCnt.toString),
+          SqlParameter("String", taskName)
         )
       )
     } yield {
