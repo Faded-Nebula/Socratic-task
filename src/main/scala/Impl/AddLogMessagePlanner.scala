@@ -7,13 +7,19 @@ import Common.ServiceUtils.schemaName
 import cats.effect.IO
 import io.circe.generic.auto.*
 import Shared.Log
-
+import APIs.TaskAPI.AddTaskIdentityMessage
 
 case class AddLogMessagePlanner(taskName:String, log:Log, override val planContext: PlanContext) extends Planner[String]:
   override def plan(using PlanContext): IO[String] = {
+
     // Check if the user is already registered
     for {
       // 获取当前 taskName 的 log 序号
+      _ <- if (log.logType == "Comment") {
+        AddTaskIdentityMessage(taskName, log.userName, "comment").send
+      } else {
+        IO.unit
+      }
       currentCnt <- readDBInt(
         s"SELECT cnt FROM ${schemaName}.task_log_counter WHERE task_name = ?",
         List(SqlParameter("String", taskName))
