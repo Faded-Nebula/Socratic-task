@@ -23,11 +23,10 @@ case class AddTaskIdentityMessagePlanner(taskName: String, userName: String, ide
       val checkUserExists = CheckUserExistsMessage(userName).send
       // Next check if the user already registered
       val checkIdentityRegistered = readDBBoolean(
-        s"SELECT EXISTS(SELECT 1 FROM ${schemaName}.task_acc WHERE task_name = ? AND user_name = ?",
+        s"SELECT EXISTS(SELECT 1 FROM ${schemaName}.task_acc WHERE task_name = ? AND user_name = ?)",
         List(
           SqlParameter("String", taskName),
-          SqlParameter("String", userName)
-        )
+          SqlParameter("String", userName))
       )
       // Then assign an avatar and a token
       val assignedAlias = RandomWordSelector.selectRandomWord()
